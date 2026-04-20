@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Saumya Mishra — Portfolio</title>
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- Fonts: Clash Display (headings) + Cabinet Grotesk (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════╗
+     ║         LOADER               ║
+     ╚══════════════════════════════╝ -->
+<div id="loader" aria-hidden="true">
+  <div class="ldr-ring ldr-ring--1"></div>
+  <div class="ldr-ring ldr-ring--2"></div>
+  <div class="ldr-ring ldr-ring--3"></div>
+  <div class="ldr-core">
+    <span class="ldr-initials">SM</span>
+  </div>
+  <div class="ldr-bar-wrap">
+    <div class="ldr-bar" id="ldrBar"></div>
+  </div>
+  <p class="ldr-label" id="ldrLabel">Initializing...</p>
+</div>
+
+<!-- ╔══════════════════════════════╗
+     ║       CUSTOM CURSOR          ║
+     ╚══════════════════════════════╝ -->
+<div id="cursor-dot"   aria-hidden="true"></div>
+<div id="cursor-ring"  aria-hidden="true"></div>
+<div id="cursor-text"  aria-hidden="true"></div>
+
+<!-- ╔══════════════════════════════╗
+     ║      THREE.JS CANVAS         ║
+     ╚══════════════════════════════╝ -->
+<canvas id="three-canvas" aria-hidden="true"></canvas>
+
+<!-- ╔══════════════════════════════╗
+     ║        NAVIGATION            ║
+     ╚══════════════════════════════╝ -->
+<header id="header">
+  <nav class="nav-inner">
+    <a href="#hero" class="nav-logo" aria-label="Home">
+      <span class="nl-text">SM</span><span class="nl-dot">.</span>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="#about"    class="nl">About</a></li>
+      <li><a href="#skills"   class="nl">Skills</a></li>
+      <li><a href="#projects" class="nl">Projects</a></li>
+      <li><a href="#contact"  class="nl">Contact</a></li>
+    </ul>
+
+    <a href="mailto:saumyamishra8771@gmail.com" class="nav-cta">
+      <span>Hire Me</span>
+    </a>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span class="hb-line"></span>
+      <span class="hb-line"></span>
+    </button>
+  </nav>
+</header>
+
+<!-- Mobile Overlay -->
+<div class="mob-overlay" id="mobOverlay" aria-hidden="true">
+  <a href="#about"    class="mo-link">About</a>
+  <a href="#skills"   class="mo-link">Skills</a>
+  <a href="#projects" class="mo-link">Projects</a>
+  <a href="#contact"  class="mo-link">Contact</a>
+  <a href="mailto:saumyamishra8771@gmail.com" class="mo-cta">Hire Me</a>
+</div>
+
+<!-- ╔══════════════════════════════╗
+     ║          HERO                ║
+     ╚══════════════════════════════╝ -->
+<section id="hero" aria-label="Introduction">
+
+  <!-- Matter.js physics canvas -->
+  <canvas id="physics-canvas" aria-hidden="true"></canvas>
+
+  <!-- Atmospheric orbs -->
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="grid-lines" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-pulse"></span>
+      <span>Available for Opportunities</span>
+    </div>
+
+    <h1 class="hero-name" aria-label="Saumya Mishra">
+      <span class="hn-line" data-reveal>
+        <span class="hn-inner">Saumya</span>
+      </span>
+      <span class="hn-line hn-outline" data-reveal>
+        <span class="hn-inner">Mishra</span>
+      </span>
+    </h1>
+
+    <div class="hero-role-wrap">
+      <span class="hr-prefix">I'm a </span>
+      <span class="hr-typed" id="typedText"></span>
+      <span class="hr-cursor" aria-hidden="true"></span>
+    </div>
+
+    <p class="hero-desc">
+      MCA Student at United Institute of Management, Prayagraj &mdash;
+      crafting elegant software and turning raw data into meaningful insight.
+    </p>
+
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-primary">
+        <span>Explore Work</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#contact" class="btn btn-ghost">Say Hello</a>
+    </div>
+
+    <div class="hero-counters" aria-label="Achievements">
+      <div class="hc-item">
+        <span class="hc-num" data-target="8">0</span><span class="hc-dec">.0</span>
+        <span class="hc-label">CGPA</span>
+      </div>
+      <div class="hc-sep" aria-hidden="true"></div>
+      <div class="hc-item">
+        <span class="hc-num" data-target="6">0</span><span class="hc-dec">+</span>
+        <span class="hc-label">Projects</span>
+      </div>
+      <div class="hc-sep" aria-hidden="true"></div>
+      <div class="hc-item">
+        <span class="hc-num" data-target="2">0</span><span class="hc-dec"></span>
+        <span class="hc-label">Internships</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D Robot Character -->
+  <div class="robot-stage" id="robotStage" aria-hidden="true">
+    <div class="robot-shadow"></div>
+    <svg class="robot-svg" id="robotSvg" viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="rg-body" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1c1c32"/>
+          <stop offset="100%" stop-color="#0d0d1c"/>
+        </linearGradient>
+        <linearGradient id="rg-head" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#22223a"/>
+          <stop offset="100%" stop-color="#0f0f1f"/>
+        </linearGradient>
+        <linearGradient id="rg-eye" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#a78bfa"/>
+          <stop offset="100%" stop-color="#6c63ff"/>
+        </linearGradient>
+        <filter id="gf" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="4" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="gf2" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Ground shadow -->
+      <ellipse cx="120" cy="308" rx="62" ry="9" fill="rgba(108,99,255,.18)"/>
+
+      <!-- LEGS -->
+      <rect x="76"  y="230" width="32" height="58" rx="14" fill="url(#rg-body)" stroke="#4a4080" stroke-width="1.2"/>
+      <rect x="132" y="230" width="32" height="58" rx="14" fill="url(#rg-body)" stroke="#4a4080" stroke-width="1.2"/>
+      <!-- Feet glow -->
+      <ellipse cx="92"  cy="288" rx="16" ry="6" fill="rgba(108,99,255,.2)"/>
+      <ellipse cx="148" cy="288" rx="16" ry="6" fill="rgba(108,99,255,.2)"/>
+
+      <!-- BODY -->
+      <rect x="56" y="122" width="128" height="114" rx="26" fill="url(#rg-body)" stroke="#4a4080" stroke-width="1.5"/>
+
+      <!-- Body chest panel -->
+      <rect x="74" y="140" width="92" height="58" rx="12" fill="rgba(108,99,255,.07)" stroke="rgba(108,99,255,.28)" stroke-width="1"/>
+
+      <!-- Panel indicator lights -->
+      <circle cx="94"  cy="169" r="7" fill="#38bdf8" filter="url(#gf2)" class="rled rled-b"/>
+      <circle cx="120" cy="169" r="7" fill="#6c63ff" filter="url(#gf2)" class="rled rled-v"/>
+      <circle cx="146" cy="169" r="7" fill="#a78bfa" filter="url(#gf2)" class="rled rled-p"/>
+
+      <!-- Panel lines -->
+      <line x1="80" y1="185" x2="160" y2="185" stroke="rgba(108,99,255,.25)" stroke-width="1"/>
+      <rect x="82" y="190" width="40" height="4" rx="2" fill="rgba(108,99,255,.2)"/>
+      <rect x="126" y="190" width="26" height="4" rx="2" fill="rgba(56,189,248,.2)"/>
+
+      <!-- ARMS -->
+      <rect x="14"  y="132" width="44" height="24" rx="12" fill="url(#rg-body)" stroke="#4a4080" stroke-width="1.2"/>
+      <rect x="182" y="132" width="44" height="24" rx="12" fill="url(#rg-body)" stroke="#4a4080" stroke-width="1.2"/>
+      <!-- Hands -->
+      <circle cx="18"  cy="144" r="9" fill="url(#rg-head)" stroke="#4a4080" stroke-width="1"/>
+      <circle cx="222" cy="144" r="9" fill="url(#rg-head)" stroke="#4a4080" stroke-width="1"/>
+
+      <!-- NECK -->
+      <rect x="103" y="108" width="34" height="18" rx="8" fill="url(#rg-body)" stroke="#4a4080" stroke-width="1"/>
+
+      <!-- HEAD -->
+      <rect x="50" y="40" width="140" height="72" rx="28" fill="url(#rg-head)" stroke="#5a50a0" stroke-width="1.8"/>
+
+      <!-- Ear panels -->
+      <rect x="30" y="55" width="22" height="14" rx="7" fill="url(#rg-body)" stroke="#4a4080" stroke-width="1"/>
+      <rect x="188" y="55" width="22" height="14" rx="7" fill="url(#rg-body)" stroke="#4a4080" stroke-width="1"/>
+      <circle cx="36"  cy="62" r="3" fill="#38bdf8" opacity=".7"/>
+      <circle cx="204" cy="62" r="3" fill="#38bdf8" opacity=".7"/>
+
+      <!-- EYE SOCKETS -->
+      <ellipse cx="88"  cy="72" rx="16" ry="17" fill="#060612"/>
+      <ellipse cx="152" cy="72" rx="16" ry="17" fill="#060612"/>
+      <!-- Eye outer glow -->
+      <ellipse cx="88"  cy="72" rx="16" ry="17" fill="none" stroke="url(#rg-eye)" stroke-width="1.5" opacity=".7"/>
+      <ellipse cx="152" cy="72" rx="16" ry="17" fill="none" stroke="url(#rg-eye)" stroke-width="1.5" opacity=".7"/>
+      <!-- Iris -->
+      <circle cx="88"  cy="72" r="9" fill="url(#rg-eye)" filter="url(#gf)" opacity=".95"/>
+      <circle cx="152" cy="72" r="9" fill="url(#rg-eye)" filter="url(#gf)" opacity=".95"/>
+      <!-- Pupils — move with cursor -->
+      <circle id="pupilL" cx="88"  cy="72" r="4.5" fill="#fff"/>
+      <circle id="pupilR" cx="152" cy="72" r="4.5" fill="#fff"/>
+      <!-- Cornea highlight -->
+      <circle cx="91"  cy="69" r="2" fill="rgba(255,255,255,.75)"/>
+      <circle cx="155" cy="69" r="2" fill="rgba(255,255,255,.75)"/>
+
+      <!-- Mouth -->
+      <path d="M 82 98 Q 120 110 158 98" stroke="#6c63ff" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+
+      <!-- ANTENNA -->
+      <line x1="120" y1="40" x2="120" y2="16" stroke="#6c63ff" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="120" cy="10" r="8" fill="#a78bfa" filter="url(#gf)" class="ant-orb"/>
+    </svg>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-cue" aria-hidden="true">
+    <div class="sc-track"><div class="sc-thumb"></div></div>
+    <span class="sc-label">scroll</span>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════╗
+     ║          ABOUT               ║
+     ╚══════════════════════════════╝ -->
+<section id="about" aria-label="About Me">
+  <div class="container">
+    <p class="eyebrow">01 — About Me</p>
+    <div class="about-grid">
+
+      <div class="about-text" data-gsap-from="left">
+        <h2 class="section-title">Building things<br/><em>that matter.</em></h2>
+
+        <p>I'm pursuing my <strong>Master of Computer Applications (MCA)</strong> at United Institute of Management, Prayagraj with a CGPA of 8.0. My technical foundation comes from a BCA at State University of Prayagraj.</p>
+
+        <p>I move fluently between worlds — building pixel-perfect React UIs, designing Python data pipelines, and architecting Power BI dashboards that turn raw numbers into clear decisions.</p>
+
+        <p>Professionally tested at <strong>InnoByte Services</strong> as a Web Developer Intern and through IBM's Front-End Development program.</p>
+
+        <div class="cert-list">
+          <div class="cert" data-cert>🏆 TCS Code Vita Season 12</div>
+          <div class="cert" data-cert>✅ SQL Server Fundamental — Scholar Hat</div>
+          <div class="cert" data-cert>🐍 Python Programming — United Institute of Management</div>
+          <div class="cert" data-cert>📊 Power BI Certification — United Institute of Management</div>
+          <div class="cert" data-cert>🚀 Hackathon 2.0 Participant</div>
+        </div>
+      </div>
+
+      <div class="about-visual" data-gsap-from="right">
+        <!-- ID Card -->
+        <div class="id-card" id="idCard">
+          <div class="idc-glow"></div>
+          <div class="idc-top">
+            <div class="idc-avatar">SM</div>
+            <div class="idc-meta">
+              <h3 class="idc-name">Saumya Mishra</h3>
+              <p class="idc-role">MCA Student · Dev · Analyst</p>
+            </div>
+          </div>
+          <div class="idc-divider"></div>
+          <div class="idc-rows">
+            <div class="idc-row"><span>📍</span><span>Prayagraj, Uttar Pradesh, India</span></div>
+            <div class="idc-row"><span>🎓</span><span>United Institute of Management</span></div>
+            <div class="idc-row"><span>✉️</span><span>saumyamishra8771@gmail.com</span></div>
+            <div class="idc-row"><span>📞</span><span>+91-9555878775</span></div>
+          </div>
+          <div class="idc-tags">
+            <span>Python</span><span>React</span><span>SQL</span><span>Power BI</span>
+          </div>
+        </div>
+
+        <!-- Experience cards -->
+        <div class="exp-stack">
+          <div class="exp-card">
+            <div class="exp-ico" style="background:linear-gradient(135deg,#7c3aed,#4c1d95)">IB</div>
+            <div class="exp-info">
+              <div class="exp-co">InnoByte Services</div>
+              <div class="exp-role">Web Development Intern · Jun 2025</div>
+            </div>
+            <div class="exp-badge">Internship</div>
+          </div>
+          <div class="exp-card">
+            <div class="exp-ico" style="background:linear-gradient(135deg,#1d4ed8,#1e3a8a)">IBM</div>
+            <div class="exp-info">
+              <div class="exp-co">IBM</div>
+              <div class="exp-role">Front-End Development · Jun–Aug 2024</div>
+            </div>
+            <div class="exp-badge">Program</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════╗
+     ║          SKILLS              ║
+     ╚══════════════════════════════╝ -->
+<section id="skills" aria-label="Technical Skills">
+  <div class="container">
+    <p class="eyebrow">02 — Skills</p>
+    <h2 class="section-title">Technical <em>Arsenal</em></h2>
+
+    <div class="skills-grid">
+
+      <!-- Left: Animated progress bars -->
+      <div class="skills-bars-wrap">
+        <h3 class="skill-group-label">Languages &amp; Frameworks</h3>
+        <div id="skillBarsLang" class="skill-bars"></div>
+
+        <h3 class="skill-group-label" style="margin-top:36px">Data &amp; Databases</h3>
+        <div id="skillBarsData" class="skill-bars"></div>
+      </div>
+
+      <!-- Right: Floating tech orbs + soft skills -->
+      <div class="skills-right">
+        <div class="tech-cloud" id="techCloud" aria-label="Technology cloud"></div>
+        <div class="soft-skills-wrap">
+          <h3 class="skill-group-label">Soft Skills</h3>
+          <div class="soft-tags">
+            <span>⏰ Time Management</span>
+            <span>🤝 Collaboration</span>
+            <span>💡 Problem Solving</span>
+            <span>🗣️ Communication</span>
+            <span>📐 Analytical Thinking</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════╗
+     ║         PROJECTS             ║
+     ╚══════════════════════════════╝ -->
+<section id="projects" aria-label="Projects">
+  <div class="container">
+    <p class="eyebrow">03 — Selected Work</p>
+    <h2 class="section-title">Projects that <em>Ship</em></h2>
+
+    <div class="projects-mosaic">
+
+      <!-- P1: COVID-19 Tracker — HERO CARD -->
+      <article class="proj-card proj-wide" data-tilt data-color="#ef4444">
+        <div class="pc-bg-glow" style="--gc:#ef4444"></div>
+        <div class="pc-number">01</div>
+        <div class="pc-content">
+          <div class="pc-tags">
+            <span>React</span><span>REST API</span><span>Data Visualization</span>
+          </div>
+          <h3 class="pc-title">COVID-19 Global Tracker</h3>
+          <p class="pc-desc">Real-time pandemic statistics dashboard — live API integration, interactive world maps, country-level data, trend charts. Fully responsive with auto-refresh.</p>
+          <div class="pc-footer">
+            <a href="https://covid19-xi-rust.vercel.app/" target="_blank" rel="noopener" class="pc-link">
+              <span>Live Demo</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="pc-icon" aria-hidden="true">🦠</div>
+      </article>
+
+      <!-- P2: Triveni Tourism -->
+      <article class="proj-card" data-tilt data-color="#10b981">
+        <div class="pc-bg-glow" style="--gc:#10b981"></div>
+        <div class="pc-number">02</div>
+        <div class="pc-content">
+          <div class="pc-tags">
+            <span>React</span><span>UI/UX</span><span>Tourism</span>
+          </div>
+          <h3 class="pc-title">Triveni Tourism</h3>
+          <p class="pc-desc">Immersive tourism site for Prayagraj's Triveni Sangam — showcasing cultural heritage and travel experience with cinematic visuals.</p>
+          <div class="pc-footer">
+            <a href="https://triveni-project.vercel.app/" target="_blank" rel="noopener" class="pc-link">
+              <span>Live Demo</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="pc-icon" aria-hidden="true">🕌</div>
+      </article>
+
+      <!-- P3: Mutual Fund — TALL CARD -->
+      <article class="proj-card proj-tall" data-tilt data-color="#f59e0b">
+        <div class="pc-bg-glow" style="--gc:#f59e0b"></div>
+        <div class="pc-number">03</div>
+        <div class="pc-content">
+          <div class="pc-tags">
+            <span>Python</span><span>Pandas</span><span>Sklearn</span><span>Power BI</span><span>Excel</span>
+          </div>
+          <h3 class="pc-title">Mutual Fund Overview &amp; Insights</h3>
+          <p class="pc-desc">Identifies top 30 mutual fund schemes from 2,500+ entries by maximizing return and minimizing risk. Full ML pipeline — data cleaning, feature engineering, clustering, and interactive Power BI dashboard.</p>
+          <div class="pc-data-row">
+            <div class="pdr-item"><span class="pdr-n">2,500+</span><span class="pdr-l">Schemes Analyzed</span></div>
+            <div class="pdr-item"><span class="pdr-n">Top 30</span><span class="pdr-l">Filtered &amp; Ranked</span></div>
+            <div class="pdr-item"><span class="pdr-n">3 Tools</span><span class="pdr-l">Python + BI + Excel</span></div>
+          </div>
+          <div class="pc-footer">
+            <span class="pc-link-muted">Python · Sklearn · Power BI · Excel</span>
+          </div>
+        </div>
+        <div class="pc-icon" aria-hidden="true">📊</div>
+      </article>
+
+      <!-- P4: Resume Analyzer -->
+      <article class="proj-card" data-tilt data-color="#3b82f6">
+        <div class="pc-bg-glow" style="--gc:#3b82f6"></div>
+        <div class="pc-number">04</div>
+        <div class="pc-content">
+          <div class="pc-tags">
+            <span>Python</span><span>NLP</span><span>React</span>
+          </div>
+          <h3 class="pc-title">Resume Analyzer</h3>
+          <p class="pc-desc">NLP-powered job-resume matcher. Extracts keywords from JDs and intelligently scores candidate resumes using semantic analysis.</p>
+          <div class="pc-footer">
+            <span class="pc-link-muted">Python · NLP · React</span>
+          </div>
+        </div>
+        <div class="pc-icon" aria-hidden="true">📄</div>
+      </article>
+
+      <!-- P6: Library System -->
+      <article class="proj-card" data-tilt data-color="#ec4899">
+        <div class="pc-bg-glow" style="--gc:#ec4899"></div>
+        <div class="pc-number">06</div>
+        <div class="pc-content">
+          <div class="pc-tags">
+            <span>Java</span><span>MySQL</span><span>OOP</span>
+          </div>
+          <h3 class="pc-title">Library Management System</h3>
+          <p class="pc-desc">Full-featured library system: book inventory, member records, issue/return workflow, automated fine calculation, and admin reports.</p>
+          <div class="pc-footer">
+            <span class="pc-link-muted">Java · MySQL</span>
+          </div>
+        </div>
+        <div class="pc-icon" aria-hidden="true">📚</div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════╗
+     ║         CONTACT              ║
+     ╚══════════════════════════════╝ -->
+<section id="contact" aria-label="Contact">
+  <div class="container">
+    <p class="eyebrow">04 — Get In Touch</p>
+    <h2 class="section-title">Let's Build<br/><em>Something Great</em></h2>
+
+    <div class="contact-layout">
+
+      <div class="contact-info" data-gsap-from="left">
+        <p class="contact-intro">Open to internships, full-time roles, freelance projects, and research collaborations. Let's connect and create.</p>
+
+        <div class="contact-links">
+          <a href="mailto:saumyamishra8771@gmail.com" class="cl-item">
+            <div class="cl-icon">✉️</div>
+            <div class="cl-text">
+              <span class="cl-label">Email</span>
+              <span class="cl-value">saumyamishra8771@gmail.com</span>
+            </div>
+            <div class="cl-arrow">→</div>
+          </a>
+          <a href="https://www.linkedin.com/in/saumyamishra-930543252" target="_blank" rel="noopener" class="cl-item">
+            <div class="cl-icon">💼</div>
+            <div class="cl-text">
+              <span class="cl-label">LinkedIn</span>
+              <span class="cl-value">saumyamishra-930543252</span>
+            </div>
+            <div class="cl-arrow">→</div>
+          </a>
+          <a href="https://github.com/Saumya2921" target="_blank" rel="noopener" class="cl-item">
+            <div class="cl-icon">🐙</div>
+            <div class="cl-text">
+              <span class="cl-label">GitHub</span>
+              <span class="cl-value">github.com/Saumya2921</span>
+            </div>
+            <div class="cl-arrow">→</div>
+          </a>
+          <div class="cl-item no-hover">
+            <div class="cl-icon">📍</div>
+            <div class="cl-text">
+              <span class="cl-label">Location</span>
+              <span class="cl-value">Prayagraj, Uttar Pradesh, India</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form id="contactForm" class="contact-form" data-gsap-from="right" novalidate>
+        <div class="cf-row">
+          <div class="cf-field">
+            <label for="cf-name">Name</label>
+            <input id="cf-name" type="text" placeholder="Your Name" required autocomplete="name"/>
+          </div>
+          <div class="cf-field">
+            <label for="cf-email">Email</label>
+            <input id="cf-email" type="email" placeholder="you@email.com" required autocomplete="email"/>
+          </div>
+        </div>
+        <div class="cf-field">
+          <label for="cf-subject">Subject</label>
+          <input id="cf-subject" type="text" placeholder="Internship / Collaboration / Project"/>
+        </div>
+        <div class="cf-field">
+          <label for="cf-msg">Message</label>
+          <textarea id="cf-msg" rows="5" placeholder="Tell me about the opportunity..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit">
+          <span class="submit-text">Send Message</span>
+          <svg class="submit-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <p class="form-success" id="formSuccess" role="status">✅ Message received! I'll reply within 24 hours.</p>
+      </form>
+
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════╗
+     ║           FOOTER             ║
+     ╚══════════════════════════════╝ -->
+<footer id="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">SM<span>.</span></div>
+    <p class="footer-copy">© 2026 Saumya Mishra &mdash; Crafted with Three.js, GSAP &amp; Matter.js</p>
+    <div class="footer-links">
+      <a href="https://github.com/Saumya2921" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/saumyamishra-930543252" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="mailto:saumyamishra8771@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
