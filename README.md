@@ -72,6 +72,9 @@ npm start
 
 ## 🌍 Live Deployment
 
+## Live project Link
+https://my-portfolio-mu-eight-73.vercel.app/#projects
+
 The project can be accessed here:
 👉
 ---
